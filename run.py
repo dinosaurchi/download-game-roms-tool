@@ -1,18 +1,20 @@
+from requests_toolbelt import MultipartEncoder
+from tqdm.auto import tqdm
+
+import pandas as pd
+import numpy as np
+
 import os
 import json
 import pathlib
 import time
 import traceback
-import pandas as pd
 import requests
 import shutil
-from tqdm.auto import tqdm
 import urllib
 import urllib.parse
-import numpy as np
 import random
 import string
-from requests_toolbelt import MultipartEncoder
 import logging
 
 
