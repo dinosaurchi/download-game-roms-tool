@@ -1,0 +1,6 @@
+requests==2.23.0
+requests-toolbelt==0.9.1
+pandas==1.0.5
+numpy==1.18.2
+urllib3==1.24.1
+tqdm==4.45.0
