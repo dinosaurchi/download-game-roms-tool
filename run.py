@@ -129,6 +129,11 @@ if __name__ == "__main__":
     parser.add_argument("--account", help="archive.org user's account JSON file path", type=str, required=True)
     args = parser.parse_args()
 
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+    )
+
     output_game_dir = pathlib.Path(args.out)
     os.makedirs(output_game_dir, exist_ok=True)
 
