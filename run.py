@@ -13,6 +13,7 @@ import numpy as np
 import random
 import string
 from requests_toolbelt import MultipartEncoder
+import logging
 
 
 def parse_quoted_url_file_name(target_url:str):
@@ -153,12 +154,12 @@ if __name__ == "__main__":
         file_name = parse_quoted_url_file_name(target_url=link)
         output_file_path = pathlib.Path(cur_dir, file_name)
 
-        print(f"Downloading [{i+1}/{len(game_infos)}] (skipped: {len(skipped_infos)})")
-        print(f"  - Title    : {title}")
-        print(f"  - Platform : {platform}")
-        print(f"  - Size     : {size_string}")
-        print(f"  - URL      : {link}")
-        print(f"  - Output   : {output_file_path}")
+        logging.info(f"Downloading [{i+1}/{len(game_infos)}] (skipped: {len(skipped_infos)})")
+        logging.info(f"  - Title    : {title}")
+        logging.info(f"  - Platform : {platform}")
+        logging.info(f"  - Size     : {size_string}")
+        logging.info(f"  - URL      : {link}")
+        logging.info(f"  - Output   : {output_file_path}")
 
         max_trials = 2
         while max_trials > 0:
@@ -169,22 +170,21 @@ if __name__ == "__main__":
             except Exception as e:
                 max_trials -= 1
                 traceback.print_exc()
-                print(str(e))
-                print("Waiting for next trial")
+                logging.info(str(e))
+                logging.info("Waiting for next trial")
                 time.sleep(5)
                 session = login()
         
         if max_trials > 0:
             log_to_downloaded(status_file_path=status_file_path, game_hash=game_hash)
         else:
-            print(f"Skipped {link}")
+            logging.info(f"Skipped {link}")
             skipped_infos.append(info)
 
-        print("Done\n-----------------------------------------")
-        print("")
+        logging.info("Done\n-----------------------------------------")
+        logging.info("")
 
-    print("Skipped summary:")
+    logging.info("Skipped summary:")
     for info in skipped_infos:
         link = info["link"]
-        print(f" - {link}")    
-    
+        logging.info(f" - {link}")
