@@ -15,6 +15,7 @@ import urllib
 import urllib.parse
 import random
 import string
+import argparse
 import logging
 
 
@@ -75,7 +76,7 @@ def to_size_string(size_gb_value:float):
     return f"{size_gb_value} GB"
 
 
-def login() -> requests.Session:
+def login(username:str, password:str) -> requests.Session:
     session = requests.Session()
 
     with open("secrets/archive.org.json", "r") as f:
@@ -120,12 +121,23 @@ def login() -> requests.Session:
 
 
 if __name__ == "__main__":
-    output_game_dir = pathlib.Path("/hdd2/game-roms")
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument("--database", help="Game database CSV file path", type=str, required=True)
+    parser.add_argument("--out", help="Output directory path", type=str, required=True)
+    parser.add_argument("--account", help="archive.org user's account JSON file path", type=str, required=True)
+    args = parser.parse_args()
+
+    output_game_dir = pathlib.Path(args.out)
     os.makedirs(output_game_dir, exist_ok=True)
 
     status_file_path = pathlib.Path("./status.txt")
 
-    game_database = pd.read_csv("./game-database.csv", sep=",")
+    game_database = pd.read_csv(args.database, sep=",")
+
+    with open(args.account, "r") as f:
+        account_info = json.loads(f.read())
 
     game_database = game_database[["title", "platform", "unit", "size_gb", "is_downloaded", "link"]]
     game_database = game_database.dropna(subset=["link"])
@@ -139,7 +151,7 @@ if __name__ == "__main__":
 
     game_infos = filter_out_downloaded(game_infos=game_infos, status_file_path=status_file_path)
 
-    session = login()
+    session = login(username=account_info["username"], password=account_info["password"])
 
     skipped_infos = []
 
@@ -175,7 +187,7 @@ if __name__ == "__main__":
                 logging.info(str(e))
                 logging.info("Waiting for next trial")
                 time.sleep(5)
-                session = login()
+                session = login(username=account_info["username"], password=account_info["password"])
         
         if max_trials > 0:
             log_to_downloaded(status_file_path=status_file_path, game_hash=game_hash)
