@@ -11,3 +11,10 @@ download.all:
 		--database $(db) \
 		--out $(output_dir) \
 		--account $(account)
+
+check.uncompressed_zip:
+	@if [ "$(path)" == "" ]; then \
+		echo -e "Missing 'path' argument as the ZIP ROMs directory path"; \
+		exit 1; \
+	fi;
+	python scripts/check_zip_file_size.py $(path)
