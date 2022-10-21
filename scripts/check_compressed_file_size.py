@@ -6,10 +6,12 @@ import glob
 import sys
 
 
-def get_uncompressed_size(zip_file_path: str) -> int:
-    zp = zipfile.ZipFile(zip_file_path)
-    size = sum([zinfo.file_size for zinfo in zp.filelist])
-    return size
+def get_uncompressed_size(compressed_file_path: str) -> int:
+    if compressed_file_path.endswith(".zip"):
+        zp = zipfile.ZipFile(compressed_file_path)
+        size = sum([zinfo.file_size for zinfo in zp.filelist])
+        return size
+    raise Exception(f"Unsupported file extension: ${compressed_file_path}")
 
 
 def get_file_size(f_path:str) -> float:
@@ -30,7 +32,7 @@ if __name__ == "__main__":
     for f_path in f_paths:
         try:
             f_name = pathlib.Path(f_path).name
-            uncompressed_size = get_uncompressed_size(zip_file_path=f_path)
+            uncompressed_size = get_uncompressed_size(compressed_file_path=f_path)
         except Exception as e:
             traceback.print_exc()
             print(e)
@@ -38,12 +40,12 @@ if __name__ == "__main__":
 
         uncompressed_total_size += uncompressed_size
 
-        zip_file_size = get_file_size(f_path=f_path)
-        total_size += zip_file_size
+        compressed_file_size = get_file_size(f_path=f_path)
+        total_size += compressed_file_size
 
         uncompressed_size_gb = bytes_to_gb(uncompressed_size)
-        zip_file_size_gb = bytes_to_gb(zip_file_size)
-        print(f"[{uncompressed_size_gb}GB / {zip_file_size_gb}GB] \t {f_name}")
+        compressed_file_size_gb = bytes_to_gb(compressed_file_size)
+        print(f"[{uncompressed_size_gb}GB / {compressed_file_size_gb}GB] \t {f_name}")
 
     print("")
 
