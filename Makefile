@@ -18,3 +18,14 @@ check.uncompressed_zip:
 		exit 1; \
 	fi;
 	python scripts/check_zip_file_size.py $(path)
+
+copy_extract.zip_roms:
+	@if [ "$(path)" == "" ]; then \
+		echo -e "Missing 'path' argument as the ZIP ROMs directory path"; \
+		exit 1; \
+	fi;
+	@if [ "$(outdir)" == "" ]; then \
+		echo -e "Missing 'outdir' argument as the output directory path"; \
+		exit 1; \
+	fi;
+	python scripts/copy_extract_zip_roms.py $(path) $(outdir)
