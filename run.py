@@ -137,7 +137,9 @@ if __name__ == "__main__":
     output_game_dir = pathlib.Path(args.out)
     os.makedirs(output_game_dir, exist_ok=True)
 
-    status_file_path = pathlib.Path("./status.txt")
+    state_dir = pathlib.Path(".", ".state")
+    os.makedirs(str(state_dir), exist_ok=True)
+    status_file_path = state_dir.joinpath("download_status.txt")
 
     game_database = pd.read_csv(args.database, sep=",")
 
