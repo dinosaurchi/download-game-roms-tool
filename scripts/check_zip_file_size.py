@@ -1,5 +1,6 @@
 import os
 import pathlib
+import traceback
 import zipfile
 import glob
 import sys
@@ -27,8 +28,14 @@ if __name__ == "__main__":
     total_size = 0
     uncompressed_total_size = 0
     for f_path in f_paths:
-        f_name = pathlib.Path(f_path).name
-        uncompressed_size = get_uncompressed_size(zip_file_path=f_path)
+        try:
+            f_name = pathlib.Path(f_path).name
+            uncompressed_size = get_uncompressed_size(zip_file_path=f_path)
+        except Exception as e:
+            traceback.print_exc()
+            print(e)
+            continue
+
         uncompressed_total_size += uncompressed_size
 
         zip_file_size = get_file_size(f_path=f_path)
