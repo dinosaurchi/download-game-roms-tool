@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     total_size = 0
     uncompressed_total_size = 0
-    for f_path in f_paths:
+    for i, f_path in enumerate(f_paths):
         try:
             f_name = pathlib.Path(f_path).name
             uncompressed_size = get_uncompressed_size(compressed_file_path=f_path)
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
         uncompressed_size_gb = bytes_to_gb(uncompressed_size)
         compressed_file_size_gb = bytes_to_gb(compressed_file_size)
-        print(f"[{uncompressed_size_gb}GB / {compressed_file_size_gb}GB] \t {f_name}")
+        print(f"[{i}/{len(f_paths)}] [{uncompressed_size_gb}GB / {compressed_file_size_gb}GB] \t {f_name}")
 
     print("")
 
