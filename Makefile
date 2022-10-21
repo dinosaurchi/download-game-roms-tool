@@ -12,12 +12,12 @@ download.all:
 		--out $(output_dir) \
 		--account $(account)
 
-check.uncompressed_zip:
+check.uncompressed_size:
 	@if [ "$(path)" == "" ]; then \
-		echo -e "Missing 'path' argument as the ZIP ROMs directory path"; \
+		echo -e "Missing 'path' argument as the Zip/7z ROMs directory path"; \
 		exit 1; \
 	fi;
-	python scripts/check_zip_file_size.py $(path)
+	python scripts/check_compressed_file_size.py $(path)
 
 copy_extract.zip_roms:
 	@if [ "$(path)" == "" ]; then \
